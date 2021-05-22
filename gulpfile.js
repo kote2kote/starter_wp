@@ -33,41 +33,41 @@ const rename = require('gulp-rename');
 const logSymbols = require('log-symbols'); //For Symbolic Console logs :) :P
 
 //Load Previews on Browser on dev
-// function livePreview(done) {
-//   browserSync.init({
-//     server: {
-//       baseDir: options.paths.root,
-//     },
-//     port: options.config.port || 5000,
-//     open: false,
-//   });
-//   done();
-// }
-
 function livePreview(done) {
-  phpServer.server(
-    {
-      base: options.paths.root,
-      port: options.config.port || 5000,
-      open: true,
-      bin: '/Applications/MAMP/bin/php/php7.2.8/bin/php',
-      ini: '/Applications/MAMP/bin/php/php7.2.8/conf/php.ini',
-    }
-
-    // function () {
-    //   browserSync.init({
-    //     // server: {
-    //     //   baseDir: options.paths.root,
-    //     // },
-    //     // port: options.config.port || 5000,
-    //     baseDir: 'http://localhost:10028/',
-    //     proxy: '127.0.0.1:5010',
-    //   });
-    // }
-  );
-  browserSync.reload();
+  browserSync.init({
+    server: {
+      baseDir: options.paths.root,
+    },
+    port: options.config.port || 5000,
+    open: false,
+  });
   done();
 }
+
+// function livePreview(done) {
+//   phpServer.server(
+//     {
+//       base: options.paths.root,
+//       port: options.config.port || 5000,
+//       open: false,
+//       bin: '/Applications/MAMP/bin/php/php7.2.8/bin/php',
+//       ini: '/Applications/MAMP/bin/php/php7.2.8/conf/php.ini',
+//     }
+
+//     // function () {
+//     //   browserSync.init({
+//     //     // server: {
+//     //     //   baseDir: options.paths.root,
+//     //     // },
+//     //     // port: options.config.port || 5000,
+//     //     baseDir: 'http://localhost:10028/',
+//     //     proxy: '127.0.0.1:5010',
+//     //   });
+//     // }
+//   );
+//   browserSync.reload();
+//   done();
+// }
 
 function icon(done) {
   for (let icon of options.icons) {

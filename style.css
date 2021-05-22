@@ -1,6 +1,6 @@
 @charset "UTF-8";
 /*!
-Theme Name: wp_test_ver2
+Theme Name: starter_wp
 Author: kote2
 Author URI: https://kote2.tokyo/
 Description: basic headless theme.
@@ -812,6 +812,9 @@ video {
 }
 .pl-12{
 	padding-left: 3rem;
+}
+.pt-\[100px\]{
+	padding-top: 100px;
 }
 .pt-3{
 	padding-top: 0.75rem;
