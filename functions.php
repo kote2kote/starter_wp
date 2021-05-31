@@ -19,11 +19,11 @@ global $is_prod;
 $is_dev = $is_prod = false;
 $dev_url = 'http://localhost:10033'; // dev環境のURL 自由に変更してください
 $prod_url = 'https://test.kote2.co'; // prod環境のURL 自由に変更してください
-// if(home_url() === $dev_url) {
-//   $is_dev = true;
-// } else {
-//   $is_prod = true;
-// }
+if(home_url() === $dev_url) {
+  $is_dev = true;
+} else {
+  $is_prod = true;
+}
 $is_prod = true;
  // ==================================================
 // default設定
@@ -103,7 +103,7 @@ function wp_test_scripts() {
   // wp_enqueue_script( 'wp_test-smoothscroll-polyfill', '//unpkg.com/smoothscroll-polyfill@0.4.4/dist/smoothscroll.min.js', array(), $id, true);
   wp_enqueue_script( 'wp_test-script-vue', 'https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js', array(), $id, true); // isDev
   // wp_enqueue_script( 'wp_test-script-vue', 'https://cdn.jsdelivr.net/npm/vue@2', array(), $id, true); // isProd
-  wp_enqueue_script( 'wp_test-script-js', get_template_directory_uri(). '/assets/build/js/script.js', array(), $id, true);
+  wp_enqueue_script( 'wp_test-script-js', get_template_directory_uri(). '/assets/build/js/scripts.js', array(), $id, true);
   // if($is_prod){
 
   // } else {

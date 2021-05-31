@@ -159,8 +159,10 @@ function prodDevSVG() {
 }
 
 function prodStyles() {
+  const tailwindcss = require('tailwindcss');
   return src(`${options.paths.src.css}/**/*.scss`)
     .pipe(sass().on('error', sass.logError))
+    .pipe(postcss([tailwindcss(options.config.tailwindjs), require('autoprefixer')]))
     .pipe(
       // purgecss({
       //   content: ['./**/*.{html,php}'],
