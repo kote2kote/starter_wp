@@ -41,11 +41,21 @@
   <ul>
     <li><a href="/">トップページ</a></li>
   </ul>
+  <ul id="menu-mainmenu" class="menu">
   <?php 
     wp_nav_menu( array(
       'theme_location'	=> 'mainmenu', // function.phpで設定したメニュー名を表示
       'container'			=> false,
+      'items_wrap' => '%3$s' //ulを削除
     ) );
+    
+// 展開例
+// <li id="menu-item-31" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-31"><a href="http://localhost:10048/category/cat01/">カテゴリ1</a></li>
+// <li id="menu-item-32" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-32"><a href="http://localhost:10048/category/cat02/">カテゴリ2</a></li>
+// <li id="menu-item-81" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-81"><a href="http://localhost:10048/category/cat03/">カテゴリ3</a></li>
+// <li id="menu-item-82" class="menu-item menu-item-type-post_type menu-item-object-cpt menu-item-82"><a href="http://localhost:10048/cpt/testpage/">カスタム投稿タイプです</a></li>
+// <li id="menu-item-94" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-94"><a href="https://www.marugame-seimen.com/shop/">sss</a></li>
   ?>
+  </ul>
 </div>
 </aside>

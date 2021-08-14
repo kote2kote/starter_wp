@@ -1,9 +1,9 @@
 /*!
-Theme Name: starter_wp
+Theme Name: test_wp
 Author: kote2
 Author URI: https://kote2.tokyo/
 Description: basic headless theme.
-Version: 1.0
+Version: 2.0.0
 License: GNU General Public License v3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 */
@@ -17,6 +17,7 @@ License URI: https://www.gnu.org/licenses/gpl-3.0.html
 @import 'mixins';
 @import 'fonts/fonts';
 @import 'common';
+@import 'https://codepen.io/kote2kote/pen/bGWRWqG.css'; // form reset
 @import 'parts_common';
 
 // pages

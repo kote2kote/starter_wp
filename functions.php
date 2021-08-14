@@ -4,14 +4,35 @@
  *
  * @link https://developer.wordpress.org/themes/basics/theme-functions/
  *
- * @package wp_test
+ * @package test_wp
+ * 
+ * 210813 スースコード整理
+ * 210807 テスト
  */
 
- // ==================================================
-// 環境変数
-// ==================================================
+// --------------------------------------------------
+// WordPressのViewを無効化(nuxt/next用)
+// --------------------------------------------------
+add_theme_support('post-thumbnails', array('post'));
+add_theme_support('menus'); 
+ 
+function my_customize_rest_cors() {
+  remove_filter( 'rest_pre_serve_request', 'rest_send_cors_headers' );
+  add_filter( 'rest_pre_serve_request', function( $value ) {
+    header( 'Access-Control-Allow-Origin: *' );
+    return $value;
+  });
+}
+add_action( 'rest_api_init', 'my_customize_rest_cors', 15 );
 
-// => 環境判別
+// --------------------------------------------------
+// 環境変数の定義
+// --------------------------------------------------
+// 記事データ作成用
+$exclude_catid = [1]; // 除外カテゴリID
+$no_images_url = 'https://kote2tokyo.kote2.co/wp-content/uploads/2019/05/test.png';
+
+// 本番/開発環境判別用
 global $dev_url;
 global $prod_url;
 global $is_dev;
@@ -19,32 +40,27 @@ global $is_prod;
 $is_dev = $is_prod = false;
 $dev_url = 'http://localhost:10033'; // dev環境のURL 自由に変更してください
 $prod_url = 'https://test.kote2.co'; // prod環境のURL 自由に変更してください
+
+// 現在の環境が本番環境/開発環境か判別フラグ作成
 if(home_url() === $dev_url) {
   $is_dev = true;
 } else {
   $is_prod = true;
 }
+
 $is_prod = true;
- // ==================================================
+
+
+// --------------------------------------------------
 // default設定
-// ==================================================
+// --------------------------------------------------
+// ログイン時の管理バーを消す場合はコメントアウト
+// add_filter('show_admin_bar', '__return_false');
 
- // ===========> クロスドメインでrestAPIを使う場合はcors設定が必要
- // ちなみにこの設定だけでheadlessなテーマとして動く。
- function my_customize_rest_cors() {
-  remove_filter( 'rest_pre_serve_request', 'rest_send_cors_headers' );
-  add_filter( 'rest_pre_serve_request', function( $value ) {
-    header( 'Access-Control-Allow-Origin: *' );
-    return $value;
-  });
-}
-add_action('rest_api_init', 'my_customize_rest_cors', 15 );
-
-
-// ===========> PHPのメモリー上限の書き換え
+// PHPのメモリー上限の書き換え
 ini_set('memory_limit', '256M');
 
-// ===========> 不要タグの削除
+// 不要タグの削除
 remove_action( 'wp_head', 'wp_generator' ); // WordPressのバージョン情報
 remove_action( 'wp_head', 'rsd_link' ); // 外部アプリケーションから情報を取得するタグ
 remove_action( 'wp_head', 'wlwmanifest_link' ); // Windows Live Writer用のタグ
@@ -62,7 +78,7 @@ remove_action( 'admin_print_styles', 'print_emoji_styles');
 remove_action('wp_head', 'rel_canonical'); // canonicalURLを削除
 add_filter( 'emoji_svg_url', '__return_false' );
 
-// ===========> add_theme_support
+// add_theme_support
 add_action( 'after_setup_theme', function(){
 add_theme_support( 'title-tag' ); // tiltleタグの追加
 add_theme_support( 'post-thumbnails' ); //サムネイル機能の追加
@@ -70,19 +86,15 @@ add_theme_support('menus'); // カスタムメニュー
 add_theme_support('widgets'); // ウィジェットの追加
 });
 
-// ===========> ログイン時の管理バーを消す
-add_filter('show_admin_bar', '__return_false');
-
-// ===========> session_start
-add_action('init', function(){
-  session_start();
-});
+// session_start(必要な場合)
+// add_action('init', function(){
+//   session_start();
+// });
 
 
-// ==================================================
-// js/css
-// ==================================================
-
+// --------------------------------------------------
+// 共通js/css
+// --------------------------------------------------
 function wp_test_scripts() {
 
   //キャッシュ対策
@@ -101,9 +113,9 @@ function wp_test_scripts() {
 
   // smoothscroll-polyfill for I,MSEdge, Safari
   // wp_enqueue_script( 'wp_test-smoothscroll-polyfill', '//unpkg.com/smoothscroll-polyfill@0.4.4/dist/smoothscroll.min.js', array(), $id, true);
-  wp_enqueue_script( 'wp_test-script-vue', 'https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js', array(), $id, true); // isDev
+  wp_enqueue_script( 'wp_test-script-vue', 'https://unpkg.com/vue@next', array(), $id, true); // isDev
   // wp_enqueue_script( 'wp_test-script-vue', 'https://cdn.jsdelivr.net/npm/vue@2', array(), $id, true); // isProd
-  wp_enqueue_script( 'wp_test-script-js', get_template_directory_uri(). '/assets/build/js/scripts.js', array(), $id, true);
+  wp_enqueue_script( 'wp_test-script-js', get_template_directory_uri(). '/assets/dist/js/script.js', array(), $id, true);
   // if($is_prod){
 
   // } else {
@@ -117,9 +129,9 @@ function wp_test_scripts() {
 }
 add_action( 'wp_enqueue_scripts', 'wp_test_scripts' );
 
-// ===================================================
+// --------------------------------------------------
 // サムネイルサイズ カスタマイズ
-// ===================================================
+// --------------------------------------------------
 add_image_size('thumb-tb', 520);
 add_image_size('thumb-pc', 960);
 add_image_size('thumb-sm', 640);
@@ -136,17 +148,16 @@ add_image_size('thumb-wide', 1536);
 // echo wp_get_attachment_image( [画像id], 'thumb-tb' )
 
 
-// ==================================================
+// --------------------------------------------------
 // メニューの設定
-// ==================================================
-
+// --------------------------------------------------
 register_nav_menus( array(
   'mainmenu' => esc_html__( 'サイドバー', 'wp_test' ),
 ));
 
-// ===================================================
+// --------------------------------------------------
 // デフォルトrestAPIを修正 tags/categories/prev/nextを追加
-// ===================================================
+// --------------------------------------------------
 function editRestAPI( $data ) {
   $data->data['tags'] = get_the_tags(); // タグ
   $data->data['categories'] = get_the_category(); // カテゴリ
@@ -158,7 +169,7 @@ add_filter( 'rest_prepare_post', 'editRestAPI', 10, 3 );
 
 // -- 前の記事 --------------------
 function getPreviousPost() {
-  $prev = get_previous_post($excluded_terms = [1]); // カテゴリid:1(未定義)を除外
+  $prev = get_previous_post($excluded_terms = $exclude_catid); // カテゴリid:1(未定義)を除外
   // 前の記事がない場合
   if(empty($prev)) { 
     $prev = []; // 空に
@@ -172,7 +183,7 @@ function getPreviousPost() {
 
 // -- 次の記事 --------------------
 function getNextPost() {
-  $next = get_next_post($excluded_terms = [1]);
+  $next = get_next_post($excluded_terms = $exclude_catid);
   if(empty($next)) {
     $next = [];
   } else {
@@ -182,17 +193,17 @@ function getNextPost() {
   return $next;
 }
 
-// ===================================================
-// Rest APIにサムネイル追加'thumbnail'エンドポイント作成
-// ===================================================
+// --------------------------------------------------
+// Rest APIにサムネイル追加'featured_image'エンドポイント作成
+// --------------------------------------------------
 
 function get_thumbURL($object, $field_name, $request) {
 	$feat_img_array = wp_get_attachment_image_src($object['featured_media'], 'large', true);
 
-	// アイキャッチ画像がない場合
+	// アイキャッチ画像がない場合(返ってきた文字列がdefaultの場合)代わりの画像を表示
 	$tmpImg = $feat_img_array[0];
 	if(strpos($feat_img_array[0],'wp-includes/images/media/default.png') !== false){
-		$tmpImg = 'https://kote2tokyo.kote2.co/wp-content/uploads/2019/05/test.png';
+		$tmpImg = $no_images_url;
 	}
 	
   return [
@@ -215,9 +226,9 @@ function add_thumbnail_to_JSON() {
 }
 add_action('rest_api_init', 'add_thumbnail_to_JSON');
 
-// ==================================================
-// スラッグ名が日本語だったら自動的に投稿タイプ＋id付与へ変更（スラッグを設定した場合は適用しない）
-// ==================================================
+// --------------------------------------------------
+// スラッグ名が日本語だったら自動的に投稿タイプ＋id付与
+// --------------------------------------------------
 function auto_post_slug( $slug, $post_ID, $post_status, $post_type ) {
   if ( preg_match( '/(%[0-9a-f]{2})+/', $slug ) ) {
       $slug = utf8_uri_encode( $post_type ) . '-' . $post_ID;
@@ -226,9 +237,51 @@ function auto_post_slug( $slug, $post_ID, $post_status, $post_type ) {
 }
 add_filter( 'wp_unique_post_slug', 'auto_post_slug', 10, 4  );
 
-// カスタム投稿タイプをrestで使う設定(必要なかった)
-// register_post_type('cpt', [
-//   // (オプション中略)
-//   'show_in_rest' => true,
-//   'rest_base' => 'cpt',
-// ]);
+
+// --------------------------------------------------
+// 検索カスタマイズ
+// --------------------------------------------------
+// タグ名・カテゴリ名・カスタムフィールド も検索対象にする
+
+function custom_search($search, $wp_query) {
+	global $wpdb;
+
+	//検索ページ以外だったら終了
+	if (!$wp_query->is_search)
+	return $search;
+
+	if (!isset($wp_query->query_vars))
+	return $search;
+
+	// タグ名・カテゴリ名・カスタムフィールド も検索対象にする
+	$search_words = explode(' ', isset($wp_query->query_vars['s']) ? $wp_query->query_vars['s'] : '');
+	if ( count($search_words) > 0 ) {
+		$search = '';
+		foreach ( $search_words as $word ) {
+			if ( !empty($word) ) {
+				$search_word = $wpdb->escape("%{$word}%");
+				$search .= " AND (
+						{$wpdb->posts}.post_title LIKE '{$search_word}'
+						OR {$wpdb->posts}.post_content LIKE '{$search_word}'
+						OR {$wpdb->posts}.ID IN (
+							SELECT distinct r.object_id
+							FROM {$wpdb->term_relationships} AS r
+							INNER JOIN {$wpdb->term_taxonomy} AS tt ON r.term_taxonomy_id = tt.term_taxonomy_id
+							INNER JOIN {$wpdb->terms} AS t ON tt.term_id = t.term_id
+							WHERE t.name LIKE '{$search_word}'
+						OR t.slug LIKE '{$search_word}'
+						OR tt.description LIKE '{$search_word}'
+						)
+						OR {$wpdb->posts}.ID IN (
+							SELECT distinct p.post_id
+							FROM {$wpdb->postmeta} AS p
+							WHERE p.meta_value LIKE '{$search_word}'
+						)
+				) ";
+			}
+		}
+	}
+
+	return $search;
+}
+add_filter('posts_search','custom_search', 10, 2);

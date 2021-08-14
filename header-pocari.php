@@ -26,8 +26,8 @@ global $is_prod;
   <![endif]-->
 </head>
 
-<body class="Pocari">
-	<div class="inner">
+<body <?php body_class('js_body'); ?>>
+	<div class="Pocari inner">
 
 <?php if($is_dev) {get_template_part('debug');} ?>
 <?php if($is_dev) {?>

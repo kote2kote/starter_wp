@@ -1,56 +1,34 @@
 // ==================================================
-// parts common
+// head common
 // ==================================================
-h2.c-tail,
-.h2.c-tail {
-  @apply flex flex-row items-center relative pl-4 pt-2 pb-2 pr-2 border-b-2 font-bold text-3xl text-white;
-  background-color: #424242;
-  &.with-margin {
-    @apply mt-12 mb-8;
-  }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
-h3.c-tail,
-.h3.c-tail {
-  @apply border border-black pl-4 pt-2 pb-2 pr-2 font-bold text-3xl;
-  box-shadow: 2px 2px 0 0 rgb(0, 0, 0);
-  color: #424242;
-  &.with-margin {
-    @apply mt-12 mb-8;
-  }
+body {
+  font-weight: normal;
+  font-family: $v-font;
+  // font-weight: 900;
+  // font-family: 'Noto Sans JP', sans-serif;
+  color: $v-color-font;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -moz-font-feature-settings: 'liga', 'kern';
+  text-rendering: optimizeLegibility;
+  background: $v-color-bg no-repeat;
+  word-wrap: break-word;
+  font-size: $v-font-size-default;
 }
-h4.c-tail,
-.h4.c-tail {
-  @apply pl-4 py-2 text-xl font-bold relative;
-  border-bottom: dashed 1px #a0aec0;
-  color: #424242;
-  &::before {
-    position: absolute;
-    content: '';
-    left: 0;
-    top: 60%;
-    transform: translateY(-50%);
-    width: 4px;
-    height: 60%;
-    border-top: solid 1.5rem #3182ce;
-  }
-  &.with-margin {
-    @apply mt-12 mb-8;
-  }
-}
-h5.c-tail,
-.h5.c-tail {
-  @apply pl-2 py-2 text-xl font-bold relative;
-  border-bottom: dashed 1px #a0aec0;
-  color: #424242;
-  &.with-margin {
-    @apply mt-12 mb-8;
-  }
-}
-h6.c-tail,
-.h6.c-tail {
-  @apply text-xl font-bold;
-  color: #424242;
-  &.with-margin {
-    @apply mt-12 mb-8;
-  }
+
+// a {
+//   transition: all 0.3s ease;
+//   &:hover {
+//     color: $v-color-link;
+//   }
+// }
+
+p {
+  padding-bottom: 1rem;
 }

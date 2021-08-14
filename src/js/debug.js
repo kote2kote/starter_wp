@@ -1,15 +1,15 @@
-//main.js file
 // ==================================================
 // debug tool
 // ==================================================
 let isDebugMode = false;
-const domDebug = document.querySelector('.debug__js');
+const domDebug = document.querySelector('.js_debug');
 function openDebug(e) {
+  console.log(e);
   let isOK = false;
   if (e.keyCode === 65) {
     // z
-    this.isDebugMode = !this.isDebugMode;
-    if (this.isDebugMode) {
+    isDebugMode = !isDebugMode;
+    if (isDebugMode) {
       domDebug.classList.remove('hidden');
     } else {
       domDebug.classList.add('hidden');
@@ -17,8 +17,3 @@ function openDebug(e) {
   }
 }
 window.addEventListener('keyup', openDebug);
-
-// ==================================================
-// objectFitImages
-// ==================================================
-objectFitImages();

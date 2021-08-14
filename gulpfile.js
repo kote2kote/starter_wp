@@ -162,24 +162,35 @@ function prodStyles() {
   const tailwindcss = require('tailwindcss');
   return src(`${options.paths.src.css}/**/*.scss`)
     .pipe(sass().on('error', sass.logError))
+    .pipe(dest(options.paths.src.css))
     .pipe(postcss([tailwindcss(options.config.tailwindjs), require('autoprefixer')]))
-    .pipe(
-      // purgecss({
-      //   content: ['./**/*.{html,php}'],
-      //   defaultExtractor: (content) => {
-      //     const broadMatches = content.match(/[^<>"'`\s]*[^<>"'`\s:]/g) || [];
-      //     const innerMatches = content.match(/[^<>"'`\s.()]*[^<>"'`\s.():]/g) || [];
-      //     return broadMatches.concat(innerMatches);
-      //   },
-      // })
-      purgecss({
-        content: ['./**/*.php'],
-        defaultExtractor: (content) => content.match(/[\w-/:]+(?<!:)/g) || [],
-      })
-    )
+    .pipe(concat({ path: 'style.css' }))
     .pipe(cleanCSS({ compatibility: 'ie8' }))
     .pipe(dest(options.paths.build.css));
 }
+
+// function prodStyles() {
+//   const tailwindcss = require('tailwindcss');
+//   return src(`${options.paths.src.css}/**/*.scss`)
+//     .pipe(sass().on('error', sass.logError))
+//     .pipe(postcss([tailwindcss(options.config.tailwindjs), require('autoprefixer')]))
+//     .pipe(
+//       // purgecss({
+//       //   content: ['./**/*.{html,php}'],
+//       //   defaultExtractor: (content) => {
+//       //     const broadMatches = content.match(/[^<>"'`\s]*[^<>"'`\s:]/g) || [];
+//       //     const innerMatches = content.match(/[^<>"'`\s.()]*[^<>"'`\s.():]/g) || [];
+//       //     return broadMatches.concat(innerMatches);
+//       //   },
+//       // })
+//       purgecss({
+//         content: ['./**/*.php'],
+//         defaultExtractor: (content) => content.match(/[\w-/:]+(?<!:)/g) || [],
+//       })
+//     )
+//     .pipe(cleanCSS({ compatibility: 'ie8' }))
+//     .pipe(dest(options.paths.build.css));
+// }
 
 function prodScripts() {
   return src([`${options.paths.src.js}/libs/**/*.js`, `${options.paths.src.js}/**/*.js`])

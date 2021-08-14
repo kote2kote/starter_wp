@@ -25,7 +25,7 @@ global $is_prod;
   <![endif]-->
 </head>
 
-<body class="pt-[100px]">
+<body <?php body_class('js_body'); ?>>
 
 <?php if($is_dev) {get_template_part('debug');} ?>
 <?php if($is_dev) {?>
@@ -35,7 +35,7 @@ global $is_prod;
 <div class="inner min-h-screen flex flex-col justify-between">
 
 <header class="bg-black text-white p-4 mb-[100px] w-full">
-Starter
+Theme Name: test_wp
 </header>
 
 

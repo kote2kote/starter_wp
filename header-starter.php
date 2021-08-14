@@ -25,7 +25,7 @@ global $is_prod;
   <![endif]-->
 </head>
 
-<body>
+<body <?php body_class('js_body'); ?>>
 
 <?php if($is_dev) {get_template_part('debug');} ?>
 <?php if($is_dev) {?>
